@@ -1,5 +1,5 @@
 from typing import List, Tuple, Union
-from random import randint, sample
+from random import randint, sample, randrange
 from operator import itemgetter
 import requests
 
@@ -104,8 +104,10 @@ def get_random_documents(min_id: int, max_id: int) -> List[dict]:
     # For every job in the Jobs table
     for i in range(min_id, max_id):
 
-        # Obtaining a list of random indexes    
-        random_indexes: List[int] = sample(range(len(DOCUMENTS)), randint(1, 5)) # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Why 1, 5?
+        # Obtaining a list of random indexes
+        # # k=randint(1, len(DOCUMENTS)) is used to choose a number between 1 and 5, so the number of documents to choose
+        random_indexes: List[int] = sample(range(0, len(DOCUMENTS)), k=randint(1, len(DOCUMENTS)))
+        print(random_indexes)
 
         # If the length of random_indexes list is greater than 1,
         # then we can convert the returned tuple into a list;
