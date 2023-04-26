@@ -78,18 +78,19 @@ def populate_documents() -> None:
 
         # Obtaining MIN and MAX ids of Jobs
         min_jobs_id, max_jobs_id = connection.execute(sql_query).fetchall()[0]
-        print(min_jobs_id, max_jobs_id)
 
         # Getting a list of random documents
         random_documents = get_random_documents(min_jobs_id, max_jobs_id)
-        print(random_documents)
 
         # INSERT query
         sql_query = 'INSERT INTO Documents (name, description, job_id)' + \
                     f'VALUES (:name, :description, :job_id)'
         
+        for i, v in enumerate(random_documents):
+            print(i, v)
+        
         # Execution of the INSERT query
-        connection.executemany(sql_query, random_documents)
+        connection.executemany(sql_query, random_documents)      
 
         # SELECT query
         sql_query = 'SELECT * FROM Documents'

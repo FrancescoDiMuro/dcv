@@ -107,7 +107,6 @@ def get_random_documents(min_id: int, max_id: int) -> List[dict]:
         # Obtaining a list of random indexes
         # # k=randint(1, len(DOCUMENTS)) is used to choose a number between 1 and 5, so the number of documents to choose
         random_indexes: List[int] = sample(range(0, len(DOCUMENTS)), k=randint(1, len(DOCUMENTS)))
-        print(random_indexes)
 
         # If the length of random_indexes list is greater than 1,
         # then we can convert the returned tuple into a list;
@@ -121,6 +120,7 @@ def get_random_documents(min_id: int, max_id: int) -> List[dict]:
         
         # Obtaining a random job_id
         random_job_id = sample(range(min_id, max_id), 1)[0]
+        print(random_job_id)
         
         # For each document in the random documents list
         for random_document_template in random_documents_templates:            
