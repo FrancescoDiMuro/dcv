@@ -22,10 +22,10 @@ A Client is unique, and for every client there can be more than one Job(s), so t
 Considering what explained above, the table will have the following structure:
 
 ```console
-    CREATE TABLE "Customers" (
-	"id"	INTEGER NOT NULL UNIQUE,
-	"name"	TEXT NOT NULL,
-	PRIMARY KEY("id" AUTOINCREMENT)
+CREATE TABLE "Customers" (
+"id"	INTEGER NOT NULL UNIQUE,
+"name"	TEXT NOT NULL,
+PRIMARY KEY("id" AUTOINCREMENT)
 )
 ```
 
