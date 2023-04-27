@@ -12,10 +12,10 @@ The entities in the db are:
 
 ### Client Entity
 Each Client has the following attributes:
-- id
-- name
+- id (integer, unique, not null, auto-increment)
+- name (text, not null)
 
-#### Client Relationships
+<u>#### Client Relationships</u>
 A Client is unique, and for every client there can be more than one Job(s), so the relation between Client and Jobs is 1 -> N.
 
 #### Table Structure
