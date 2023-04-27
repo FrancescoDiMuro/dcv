@@ -33,7 +33,8 @@ def populate_customers() -> None:
         # Obtaining the result as a list of tuples
         result = connection.execute(sql_query).fetchall()
 
-        # print(result)
+        if len(result) > 0:
+            print('populate_customers() OK')
 
 
 def populate_jobs() -> None:
@@ -64,7 +65,8 @@ def populate_jobs() -> None:
         # Obtaining the result as a list of tuples
         result = connection.execute(sql_query).fetchall()
 
-        # print(result)
+        if len(result) > 0:
+            print('populate_jobs() OK')
 
 
 def populate_documents() -> None:
@@ -98,7 +100,8 @@ def populate_documents() -> None:
         # Obtaining the result as a list of tuples
         result = connection.execute(sql_query).fetchall()
 
-        # print(result)
+        if len(result) > 0:
+            print('populate_documents() OK')
 
 
 def populate_users() -> None:
@@ -123,7 +126,8 @@ def populate_users() -> None:
         # Obtaining the result as a list of tuples
         result = connection.execute(sql_query).fetchall()
 
-        # print(result)
+        if len(result) > 0:
+            print('populate_users() OK')
 
 
 reset_sql_sequence()

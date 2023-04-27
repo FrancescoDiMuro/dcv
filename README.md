@@ -56,7 +56,7 @@ CREATE TABLE "Jobs" (
 #### Table Integrity Checks
 If a Customer is deleted from the corresponding table, all the Jobs will have an id which is no longer referencing to any Customer,
 causing to have invalid data.
-To avoid this behaviour, an integrity check **ON DELTE CASCADE** has been added to the foreign key customer_id, so if a Customer is deleted,
+To avoid this behaviour, an integrity check **ON DELETE CASCADE** has been added to the foreign key customer_id, so if a Customer is deleted,
 all the Job(s) referred to it will be deleted as well.
 
 ### Document Entity
@@ -86,5 +86,5 @@ CREATE TABLE "Documents" (
 #### Table Integrity Checks
 If a Job is deleted from the corresponding table, all the Documents will have an id which is no longer referencing to any Job,
 causing to have invalid data.
-To avoid this behaviour, an integrity check **ON DELTE CASCADE** has been added to the foreign key job_id, so if a Job is deleted,
+To avoid this behaviour, an integrity check **ON DELETE CASCADE** has been added to the foreign key job_id, so if a Job is deleted,
 all the Document(s) referred to it will be deleted as well.
