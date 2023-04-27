@@ -12,14 +12,14 @@ The entities in the db are:
 
 ### Client Entity
 Each Client has the following attributes:
-- id (integer, unique, not null, auto-increment)
-- name (text, not null)
+- id
+- name
 
-<u>#### Client Relationships</u>
-A Client is unique, and for every client there can be more than one Job(s), so the relation between Client and Jobs is 1 -> N.
+#### Client Relationships
+A Client is unique, and for every client there can be more than one Job(s), so the relation between Client and Jobs is 1 → N.
 
 #### Table Structure
-Considering what explained above, the table will have the following structure:
+Considering what explained above, the data table will have the following structure:
 
 ```console
 CREATE TABLE "Customers" (
@@ -29,3 +29,24 @@ PRIMARY KEY("id" AUTOINCREMENT)
 )
 ```
 
+### Job Entity
+Each Job has the following attributes:
+- id
+- name
+
+#### Job Relationships
+A Job is unique, and for every job there can be more than one Documents(s), so the relation between Jobs and Documents is 1 → N.
+
+#### Table Structure
+Considering what explained above, the data table will have the following structure:
+
+```console
+CREATE TABLE "Jobs" (
+	"id"	INTEGER NOT NULL UNIQUE,
+	"name"	TEXT NOT NULL,
+	"description"	TEXT NOT NULL,
+	"customer_id"	INTEGER NOT NULL,
+	FOREIGN KEY("customer_id") REFERENCES "Customers"("id") ON DELETE CASCADE,
+	PRIMARY KEY("id" AUTOINCREMENT)
+)
+```
