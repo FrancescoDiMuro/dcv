@@ -1,7 +1,8 @@
 import fastapi
 import sqlite3
 from os import getcwd
-from dto import User
+from typing import List
+from backend.dto import User
 
 
 WORKING_DIR: str = getcwd()
@@ -14,27 +15,55 @@ app = fastapi.FastAPI()
 def root():
     return {'message': 'Home Page'}
 
-@app.get('/users')
-async def get_users():
+@app.get('/users', description='Get list of configured Users')
+async def get_users() -> List[User]:
 
+    # Creazione di un dizionario per trasformare la lista di liste in una lista di dizionari    
     d: dict = {}
 
+    # Lista di utenti
+    users: List[User] = []
+
+    # Query di SELECT
+    query: str = '''SELECT * 
+                    FROM Users 
+                    WHERE Users.deleted_at IS NULL 
+                    ORDER BY Users.name'''
+
+    # Inizializzazione della connessione con il DB SQLite
     with sqlite3.connect(DATABASE_DIR) as connection:
-        # rows = connection.execute('SELECT * FROM Users WHERE Users.deleted_at IS NULL ORDER BY Users.name')
-        cursor = connection.execute('SELECT * FROM Documents WHERE Documents.deleted_at IS NULL ORDER BY Documents.id')
+        
+        # Ottenimento del cursore SQLite3
+        cursor = connection.execute(query)
+
+        # Ottenimento dei records
         rows = cursor.fetchall()
+
+        # Ottenimento dei nomi delle colonne del risultato della query
         column_names = [c[0] for c in cursor.description]
 
-        
-        for i, r in enumerate(rows):
+        # Per ogni riga nel risultato della query
+        for r in rows:
+            
+            # zip dei nomi delle colonne con i valori delle stesse
             r = list(zip(column_names, r))
+            
+            # Per ogni tupla zippata (k, v), creazione del dizionario con l'associazione k = v
             for t in r:
                 d[t[0]] = t[1]
             
-            rows[i] = d
+            # Unpacking dei valori del dizionario
+            id, name, surname, email, password, created_at, updated_at, deleted_at, access_level_id  = d.values()
+            user: User = User(id=id, 
+                            name=name, 
+                            surname=surname, 
+                            email=email, 
+                            password=password, 
+                            created_at=created_at, 
+                            updated_at=updated_at, 
+                            deleted_at=deleted_at, 
+                            access_level_id=access_level_id)
 
-        id, name = d.values()
-
-        users = User(id=id, name=name)
+            users.append(user)
     
         return users
