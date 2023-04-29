@@ -1,6 +1,6 @@
+import sqlite3
 from os import getcwd
 from utils import get_random_users, get_random_customers, get_random_jobs, get_random_documents
-import sqlite3
 
 
 WORKING_DIR: str = getcwd()

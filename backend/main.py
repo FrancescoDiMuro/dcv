@@ -8,6 +8,8 @@ from os import getcwd
 from typing import List
 from backend.dto.dto import User, Customer, Job, Document, Revision
 
+from backend.utils.customers_utils import get_customers_list, get_customer
+
 # Constants declaration and initialization
 WORKING_DIR: str = getcwd()
 BACKEND_DIR = f'{WORKING_DIR}\\backend'
@@ -27,7 +29,10 @@ app = FastAPI()
 # Root
 @app.get('/', response_class=HTMLResponse)
 def root(request: Request) -> HTMLResponse:
-    return templates.TemplateResponse('index.html', {'request': request})
+    
+    customers: List[Customer] = get_customers_list()
+
+    return templates.TemplateResponse('index.html', {'request': request, 'customers': customers})
 
 # GET /users
 @app.get('/users', description='Get list of configured Users')
@@ -87,53 +92,16 @@ async def get_users() -> List[User]:
 # GET /customers
 @app.get('/customers', description='Get list of configured Customers')
 async def get_customers() -> List[Customer]:
+    return get_customers_list()
 
-    # Creating a dictionary to use it as a container for Customer data
-    d: dict = {}
 
-    # Initialize empty list of customers
-    customers: List[Customer] = []
-
-    query: str = '''SELECT * 
-                    FROM Customers 
-                    WHERE Customers.deleted_at IS NULL 
-                    ORDER BY Customers.name'''
-
-    # Inizialize SQLite db connection
-    with sqlite3.connect(DATABASE_DIR) as connection:
-        
-        # Obtaining cursor from db
-        cursor = connection.execute(query)
-
-        # Obtaining records from table
-        rows = cursor.fetchall()
-
-        # Obtaining columns names from the cursor
-        column_names = [c[0] for c in cursor.description]
-
-        # For each row in the query result
-        for r in rows:
-            
-            # zipping column name with the corresponding value
-            r = list(zip(column_names, r))
-            
-            # For each zipped tuple (k, v), creating a dictionary with the association k:v
-            for t in r:
-                d[t[0]] = t[1]
-            
-            # Unpacking dictionary values
-            id, name, created_at, updated_at, deleted_at = d.values()
-            customer: Customer = Customer(id=id, 
-                                      name=name,                             
-                                      created_at=created_at, 
-                                      updated_at=updated_at, 
-                                      deleted_at=deleted_at)
-
-            # Append the Customer to the list of Customers
-            customers.append(customer)
+# GET /customers/{customer_id}
+@app.get('/customers/{customer_id}', description='Get a specific Customers by its id')
+async def get_customer_by_id(request: Request, customer_id: int) -> Customer:
     
-        return customers
-    
+    customer: Customer = get_customer(customer_id=customer_id)
+
+    return templates.TemplateResponse('customer.html', {'request': request, 'customer': customer})
 
 # GET /jobs
 @app.get('/jobs', description='Get list of configured Jobs')

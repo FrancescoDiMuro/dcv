@@ -3,15 +3,15 @@
         <title>Homepage</title>
     </head>
     <body>
-        <h1>Welcome to the DCV Portal.</h1>
+        <h1>Welcome to the DCV Portal</h1>
         <table>
             {% for customer in customers %}
                 <tr>
-                    <td>{{ customer.id }}</td>
-                    <td>{{ customer.name }}</td>
-                    <td>{{ customer.created_at }}</td>
-                    <td>{{ customer.updated_at }}</td>
-                    <td>{{ customer.deleted_at }}</td>
+                    <!-- <td>{{ customer.id }}</td> -->                    
+                    <td><a href="/customers/{{customer.id}}">{{ customer.name }}</a>
+                    <!-- <td>{{ customer.created_at }}</td> -->
+                    <!-- <td>{{ customer.updated_at }}</td> -->
+                    <!-- <td>{{ customer.deleted_at }}</td> -->
                 </tr>
             {% endfor %}
         </table>
