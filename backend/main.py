@@ -1,20 +1,35 @@
-import fastapi
 import sqlite3
+
+from fastapi import FastAPI, Request, HTTPException
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from os import getcwd
 from typing import List
-from backend.dto import User
+from backend.dto.dto import User
 
-
+# Constants declaration and initialization
 WORKING_DIR: str = getcwd()
 BACKEND_DIR = f'{WORKING_DIR}\\backend'
 DATABASE_DIR: str = f'{BACKEND_DIR}\\dcv.db'
+TEMPLATES_DIR = f'{WORKING_DIR}\\frontend\\static\\templates'
 
-app = fastapi.FastAPI()
 
-@app.get('/')
-def root():
-    return {'message': 'Home Page'}
+# Templates object to use templates in the app
+templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
+# App configuration
+
+# Creazione dell'app con FastAPI
+app = FastAPI()
+
+# Endpoints configuration
+# Root
+@app.get('/', response_class=HTMLResponse)
+def root(request: Request) -> HTMLResponse:
+    return templates.TemplateResponse('index.html', {'request': request})
+
+# GET /users
 @app.get('/users', description='Get list of configured Users')
 async def get_users() -> List[User]:
 
