@@ -2,7 +2,7 @@ from datetime import datetime
 from pydantic import BaseModel
 
 class Customer(BaseModel):
-    id: int
+    id: int | None = None
     name: str
     created_at: datetime
     updated_at: datetime

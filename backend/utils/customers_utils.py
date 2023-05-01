@@ -1,15 +1,35 @@
 import sqlite3
 from os import getcwd
 from typing import List
-from backend.dto.dto import Customer
+from backend.schemas.dto import Customer
+from typing import Any
 
 
 WORKING_DIR: str = getcwd()
 BACKEND_DIR = f'{WORKING_DIR}\\backend'
 DATABASE_DIR: str = f'{BACKEND_DIR}\\dcv.db'
 
+def query_table(table_name: str, 
+                columns: List[str] | str, 
+                where_condition: str = '1=1',
+                order_by: str = '1',
+                asc: bool = True,  
+                return_type: object = None) -> Any:
 
-def get_customers_list() -> List[Customer]:
+    if type(columns) == List[str]:
+        columns = ','.join(columns)
+    else:
+        columns = columns[0]
+
+    sql_query: str = f'''SELECT {columns} 
+                         FROM {table_name}
+                         WHERE {where_condition}
+                         ORDER BY {order_by} {"" if asc else "DESC"}'''
+    
+    print(sql_query)
+
+
+def u_get_customers() -> List[Customer]:
     
     # Creating a dictionary to use it as a container for Customer data
     d: dict = {}
@@ -44,13 +64,8 @@ def get_customers_list() -> List[Customer]:
             for t in r:
                 d[t[0]] = t[1]
             
-            # Unpacking dictionary values
-            id, name, created_at, updated_at, deleted_at = d.values()
-            customer: Customer = Customer(id=id, 
-                                      name=name,                             
-                                      created_at=created_at, 
-                                      updated_at=updated_at, 
-                                      deleted_at=deleted_at)
+            # Unpacking dictionary values            
+            customer: Customer = Customer(**d)
 
             # Append the Customer to the list of Customers
             customers.append(customer)
@@ -58,7 +73,7 @@ def get_customers_list() -> List[Customer]:
         return customers
     
 
-def get_customer(customer_id: int):
+def u_get_customer_by_id(customer_id: int):
 
     # Creating a dictionary to use it as a container for Customer data
     d: dict = {}
@@ -92,12 +107,9 @@ def get_customer(customer_id: int):
             d[t[0]] = t[1]
         
         # Unpacking dictionary values
-        id, name, created_at, updated_at, deleted_at = d.values()
-        customer: Customer = Customer(id=id, 
-                                      name=name,                             
-                                      created_at=created_at, 
-                                      updated_at=updated_at, 
-                                      deleted_at=deleted_at)
-
+        customer: Customer = Customer(**d)
     
         return customer
+    
+
+query_table('Customers', ['name', 'created_at'])

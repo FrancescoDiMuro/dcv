@@ -2,6 +2,7 @@ from typing import List, Tuple, Union
 from random import randint, sample, randrange
 from operator import itemgetter
 import requests
+from datetime import datetime
 
 RANDOM_USER_API: str = 'https://randomuser.me/api/'
 RANDOM_USERS_API: str = 'https://randomapi.com/api/6de6abfedb24f889e0b5f675edc50deb?fmt=raw&sole'
@@ -131,3 +132,7 @@ def get_random_documents(min_id: int, max_id: int) -> List[dict]:
             random_documents.append(random_document_template)
     
     return random_documents
+
+
+def ISO8601_now():
+    return datetime.strptime(datetime.now().strftime('%Y-%m-%dT%H:%M%S.%f'), '%Y-%m-%dT%H:%M%S.%f')

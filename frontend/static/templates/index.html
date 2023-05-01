@@ -1,14 +1,28 @@
 <html>
     <head>
-        <title>Homepage</title>
+        <title>Homepage</title>        
     </head>
-    <body>
-        <h1>Welcome to the DCV Portal</h1>
+    <script type="module" src="https://unpkg.com/rough-notation?module"></script>
+    <script>
+
+        import { annotate } from 'rough-notation';
+        // Or using unpkg
+        // import { annotate } from 'https://unpkg.com/rough-notation?module';
+        
+        const e = document.getElementById('test');
+        // e.innerHTML = 'Test!';
+        const annotation = annotate(e, { type: 'box' });
+        annotation.show();
+
+    </script>
+    <body>    
+        <h1 id='test'>Welcome to the DCV Portal</h1>
         <table>
             {% for customer in customers %}
                 <tr>
                     <!-- <td>{{ customer.id }}</td> -->                    
-                    <td><a href="/customers/{{customer.id}}">{{ customer.name }}</a>
+                    <td><a href="/customers/{{customer.id}}">{{ customer.name }}</a></td>
+                    <td><a data-method="patch" href="/customers/{{customer.id}}">Delete</a></td>
                     <!-- <td>{{ customer.created_at }}</td> -->
                     <!-- <td>{{ customer.updated_at }}</td> -->
                     <!-- <td>{{ customer.deleted_at }}</td> -->
