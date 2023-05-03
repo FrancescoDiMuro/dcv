@@ -1,3 +1,20 @@
-PATCH http://127.0.0.1:8080/customers/2
+# ------------------------- USERS -------------------------
+# Get the list of Users
+GET http://127.0.0.1:8080/users/
 
-GET http://127.0.0.1:8080/customers/2
+# Get a specific User by its id
+GET http://127.0.0.1:8080/users/1
+
+# User not found
+GET http://127.0.0.1:8080/users/9999
+
+# ------------------------- CUSTOMERS -------------------------
+
+# Get the list of Customers
+GET http://127.0.0.1:8080/customers/
+
+# Get a specific Customer by its id
+GET http://127.0.0.1:8080/customers/1
+
+# Customer not found
+GET http://127.0.0.1:8080/customers/9999
