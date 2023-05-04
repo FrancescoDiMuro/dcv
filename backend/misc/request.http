@@ -18,3 +18,44 @@ GET http://127.0.0.1:8080/customers/1
 
 # Customer not found
 GET http://127.0.0.1:8080/customers/9999
+
+# Creates a new customer
+POST http://127.0.0.1:8080/customers/ HTTP/1.1
+Accept: application/json
+
+{
+    "name": "New Customer 1"
+}
+
+# ------------------------- JOBS -------------------------
+
+# Get the list of Customers
+GET http://127.0.0.1:8080/jobs/
+
+# Get a specific Customer by its id
+GET http://127.0.0.1:8080/jobs/1
+
+# Job not found
+GET http://127.0.0.1:8080/jobs/9999
+
+# ------------------------- DOCUMENTS -------------------------
+
+# Get the list of Documents
+GET http://127.0.0.1:8080/documents/
+
+# Get a specific Document by its id
+GET http://127.0.0.1:8080/documents/1
+
+# Document not found
+GET http://127.0.0.1:8080/documents/9999
+
+# ------------------------- REVISIONS -------------------------
+
+# Get the list of Revisions
+GET http://127.0.0.1:8080/revisions/
+
+# Get a specific Revision by its id
+GET http://127.0.0.1:8080/revisions/1
+
+# Revision not found
+GET http://127.0.0.1:8080/revisions/9999

@@ -1,11 +1,12 @@
 from datetime import datetime
 from pydantic import BaseModel
+from backend.utils.utils import ISO8601_now
 
 class Customer(BaseModel):
     id: int | None = None
     name: str
-    created_at: datetime
-    updated_at: datetime
+    created_at: datetime = ISO8601_now
+    updated_at: datetime = ISO8601_now
     deleted_at: datetime | None = None
 
 class Job(BaseModel):

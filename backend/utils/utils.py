@@ -9,7 +9,7 @@ BACKEND_DIR = f'{WORKING_DIR}\\backend'
 DATABASE_DIR: str = f'{BACKEND_DIR}\\dcv.db'
 
 def ISO8601_now():
-    return datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M%S.%f%z')
+    return datetime.strptime(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M%S.%f%z'), '%Y-%m-%dT%H:%M%S.%f%z')
 
 
 def select_rows_from_table(query: str, query_parameters: dict = {}) -> List[dict]:

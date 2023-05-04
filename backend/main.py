@@ -25,7 +25,7 @@ TEMPLATES_DIR = f'{WORKING_DIR}\\frontend\\static\\templates'
 
 
 # Templates object to use templates in the app
-templates = Jinja2Templates(directory=TEMPLATES_DIR)
+# templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 # ----- FastAPI App -----
 
@@ -52,28 +52,19 @@ async def get_customers() -> List[Customer] | object:
 # GET /customers/{customer_id}
 @app.get('/customers/{customer_id}', description='Get a Customer by its id')
 async def get_customer_by_id(customer_id: int) -> Customer | object:
-    customer = u_get_customer_by_id(customer_id=customer_id)
-    
+    customer = u_get_customer_by_id(customer_id=customer_id)    
     return customer if customer is not None else HTTPException(204)
 
 
 # POST /customers
 @app.post('/customers', description='Creates a new Customer', response_model=Customer)
-async def post_customer(customer_name: str = Form(...)) -> Customer:
-    
-    # Settings created_at and updated_at timestamps
-    created_at = updated_at = ISO8601_now()
-    
-    # Creation of Customer
-    customer = Customer(name=customer_name,
-                        created_at=created_at,
-                        updated_at=updated_at)
+async def post_customer(customer: Customer) -> Customer:
     
     # Inizialize SQLite db connection
     with sqlite3.connect(DATABASE_DIR) as connection:
     
         sql_query = '''INSERT INTO Customers (name, created_at, updated_at)
-                        VALUES (:name, :created_at, :updated_at)'''
+                       VALUES (:name, :created_at, :updated_at)'''
         
         # Execution of the INSERT query
         connection.execute(sql_query, customer.dict())
@@ -95,44 +86,44 @@ async def delete_customer(customer_id: int):
         
 # GET /jobs
 @app.get('/jobs', description='Get list of configured Jobs')
-async def get_jobs() -> List[Job]:
+async def get_jobs() -> List[Job] | object:
     jobs = u_get_jobs()
-    return jobs
+    return jobs if jobs is not None else HTTPException(204)
 
 
 # GET /jobs/{job_id}
 @app.get('/jobs/{job_id}', description='Get a Job by its id')
-async def get_job_by_id(job_id: int) -> Job:
-    job = u_get_job_by_id(job_id=job_id)
-    return job
+async def get_job_by_id(job_id: int) -> Job | object:
+    job = u_get_job_by_id(job_id=job_id)    
+    return job if job is not None else HTTPException(204)
     
 
 # GET /documents
 @app.get('/documents', description='Get list of configured Documents')
-async def get_documents() -> List[Document]:
+async def get_documents() -> List[Document] | object:
     documents = u_get_documents()
-    return documents
+    return documents if documents is not None else HTTPException(204)
 
 
 # GET /documents/{document_id}
 @app.get('/documents/{document_id}', description='Get a Document by its id')
-async def get_document_by_id(document_id: int) -> Document:
+async def get_document_by_id(document_id: int) -> Document | object:
     document = u_get_document_by_id(document_id=document_id)
-    return document
+    return document if document is not None else HTTPException(204)
     
 
 # GET /revisions
 @app.get('/revisions', description='Get list of configured Revisions')
-async def get_revisions() -> List[Revision]:
+async def get_revisions() -> List[Revision] | object:
     revisions = u_get_revisions()
-    return revisions
+    return revisions if revisions is not None else HTTPException(204)
 
 
 # GET /revisions/{revision_id}
 @app.get('/revisions/{revision_id}', description='Get a Revision by its id')
-async def get_revision_by_id(revision_id: int) -> Revision:
+async def get_revision_by_id(revision_id: int) -> Revision | object:
     revision = u_get_revision_by_id(revision_id=revision_id)
-    return revision
+    return revision if revision is not None else HTTPException(204)
     
 
 # GET /users

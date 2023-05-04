@@ -1,58 +1,49 @@
-import sqlite3
 from typing import List
 from backend.schemas.dto import Document
-from backend.utils.utils import DATABASE_DIR
+from backend.utils.utils import select_rows_from_table, select_row_from_table
 
 
-def u_get_documents() -> List[Document]:
+def u_get_documents() -> List[Document] | None:
+    '''
+        Summary:
+            returns a list of Documents if there are any, otherwise it returns None
+
+        Parameters:
+            None
+
+        Return Value:
+            List[Document] | None
+    '''
     
-    # Creating a dictionary to use it as a container for Document data
-    d: dict = {}
-
-    # Initialize empty list of documents
-    documents: List[Document] = []
-
+    # Defining the query to execute
     query: str = '''SELECT * 
                     FROM Documents 
                     WHERE Documents.deleted_at IS NULL 
                     ORDER BY Documents.id'''
+     
+    # Obtaining the list of Documents, unpacking the dictonaries in the data variable
+    documents_list = select_rows_from_table(query=query)
 
-    # Inizialize SQLite db connection
-    with sqlite3.connect(DATABASE_DIR) as connection:
-        
-        # Obtaining cursor from db
-        cursor = connection.execute(query)
-
-        # Obtaining records from table
-        rows = cursor.fetchall()
-
-        # Obtaining columns names from the cursor
-        column_names = [c[0] for c in cursor.description]
-
-        # For each row in the query result
-        for r in rows:
-            
-            # zipping column name with the corresponding value
-            r = list(zip(column_names, r))
-            
-            # For each zipped tuple (k, v), creating a dictionary with the association k:v
-            for t in r:
-                d[t[0]] = t[1]
-            
-            # Unpacking dictionary values            
-            document: Document = Document(**d)
-
-            # Append the Document to the list of Documents
-            documents.append(document)
+    # If there is some data
+    if len(documents_list) > 0:
+        return [Document(**data) for data in documents_list]
     
-        return documents
+    return None
+   
+
+def u_get_document_by_id(document_id: int) -> Document | None:
+    '''
+        Summary:
+            returns a Document if the document with "document_id" is found, otherwise it returns None
+
+        Parameters:
+            document_id (int): id of the document to look for
+
+        Return Value:
+            Document | None
+    '''
     
-
-def u_get_document_by_id(document_id: int):
-
-    # Creating a dictionary to use it as a container for Document data
-    d: dict = {}
-
+    # Defining the query to execute
     query: str = '''SELECT * 
                     FROM Documents 
                     WHERE Documents.deleted_at IS NULL AND 
@@ -62,27 +53,7 @@ def u_get_document_by_id(document_id: int):
     # Defining and assigning query parameters
     query_parameters = {'document_id': document_id}
 
-    # Inizialize SQLite db connection
-    with sqlite3.connect(DATABASE_DIR) as connection:
-        
-        # Obtaining cursor from db
-        cursor = connection.execute(query, query_parameters)
-
-        # Obtaining records from table
-        r = cursor.fetchone()
-
-        # Obtaining columns names from the cursor
-        column_names = [c[0] for c in cursor.description]
-
-        # zipping column name with the corresponding value
-        r = list(zip(column_names, r))
-            
-        # For each zipped tuple (k, v), creating a dictionary with the association k:v
-        for t in r:
-            d[t[0]] = t[1]
-        
-        # Unpacking dictionary values
-        document: Document = Document(**d)
+    document_id: dict = select_row_from_table(query=query, query_parameters=query_parameters)
     
-        return document
+    return Document(**document_id) if len(document_id.items()) > 0 else None
     

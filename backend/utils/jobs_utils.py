@@ -1,59 +1,49 @@
-import sqlite3
-from os import getcwd
 from typing import List
 from backend.schemas.dto import Job
-from backend.utils.utils import DATABASE_DIR
+from backend.utils.utils import select_rows_from_table, select_row_from_table
 
 
-def u_get_jobs() -> List[Job]:
+def u_get_jobs() -> List[Job] | None:
+    '''
+        Summary:
+            returns a list of Jobs if there are any, otherwise it returns None
+
+        Parameters:
+            None
+
+        Return Value:
+            List[Job] | None
+    '''
     
-    # Creating a dictionary to use it as a container for Job data
-    d: dict = {}
-
-    # Initialize empty list of jobs
-    jobs: List[Job] = []
-
+    # Defining the query to execute
     query: str = '''SELECT * 
                     FROM Jobs 
                     WHERE Jobs.deleted_at IS NULL 
                     ORDER BY Jobs.id'''
+     
+    # Obtaining the list of Jobs, unpacking the dictonaries in the data variable
+    jobs_list = select_rows_from_table(query=query)
 
-    # Inizialize SQLite db connection
-    with sqlite3.connect(DATABASE_DIR) as connection:
-        
-        # Obtaining cursor from db
-        cursor = connection.execute(query)
-
-        # Obtaining records from table
-        rows = cursor.fetchall()
-
-        # Obtaining columns names from the cursor
-        column_names = [c[0] for c in cursor.description]
-
-        # For each row in the query result
-        for r in rows:
-            
-            # zipping column name with the corresponding value
-            r = list(zip(column_names, r))
-            
-            # For each zipped tuple (k, v), creating a dictionary with the association k:v
-            for t in r:
-                d[t[0]] = t[1]
-            
-            # Unpacking dictionary values            
-            job: Job = Job(**d)
-
-            # Append the Job to the list of Jobs
-            jobs.append(job)
+    # If there is some data
+    if len(jobs_list) > 0:
+        return [Job(**data) for data in jobs_list]
     
-        return jobs
+    return None
+   
+
+def u_get_job_by_id(job_id: int) -> Job | None:
+    '''
+        Summary:
+            returns a Job if the job with "job_id" is found, otherwise it returns None
+
+        Parameters:
+            job_id (int): id of the job to look for
+
+        Return Value:
+            Job | None
+    '''
     
-
-def u_get_job_by_id(job_id: int):
-
-    # Creating a dictionary to use it as a container for Job data
-    d: dict = {}
-
+    # Defining the query to execute
     query: str = '''SELECT * 
                     FROM Jobs 
                     WHERE Jobs.deleted_at IS NULL AND 
@@ -63,27 +53,7 @@ def u_get_job_by_id(job_id: int):
     # Defining and assigning query parameters
     query_parameters = {'job_id': job_id}
 
-    # Inizialize SQLite db connection
-    with sqlite3.connect(DATABASE_DIR) as connection:
-        
-        # Obtaining cursor from db
-        cursor = connection.execute(query, query_parameters)
-
-        # Obtaining records from table
-        r = cursor.fetchone()
-
-        # Obtaining columns names from the cursor
-        column_names = [c[0] for c in cursor.description]
-
-        # zipping column name with the corresponding value
-        r = list(zip(column_names, r))
-            
-        # For each zipped tuple (k, v), creating a dictionary with the association k:v
-        for t in r:
-            d[t[0]] = t[1]
-        
-        # Unpacking dictionary values
-        job: Job = Job(**d)
+    job_data: dict = select_row_from_table(query=query, query_parameters=query_parameters)
     
-        return job
+    return Job(**job_data) if len(job_data.items()) > 0 else None
     

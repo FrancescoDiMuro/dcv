@@ -1,59 +1,49 @@
-import sqlite3
-from os import getcwd
 from typing import List
 from backend.schemas.dto import Revision
-from backend.utils.utils import DATABASE_DIR
+from backend.utils.utils import select_rows_from_table, select_row_from_table
 
 
-def u_get_revisions() -> List[Revision]:
+def u_get_revisions() -> List[Revision] | None:
+    '''
+        Summary:
+            returns a list of Revisions if there are any, otherwise it returns None
+
+        Parameters:
+            None
+
+        Return Value:
+            List[Revision] | None
+    '''
     
-    # Creating a dictionary to use it as a container for Revision data
-    d: dict = {}
-
-    # Initialize empty list of revisions
-    revisions: List[Revision] = []
-
+    # Defining the query to execute
     query: str = '''SELECT * 
                     FROM Revisions 
                     WHERE Revisions.deleted_at IS NULL 
                     ORDER BY Revisions.id'''
+     
+    # Obtaining the list of Revisions, unpacking the dictonaries in the data variable
+    revisions_list = select_rows_from_table(query=query)
 
-    # Inizialize SQLite db connection
-    with sqlite3.connect(DATABASE_DIR) as connection:
-        
-        # Obtaining cursor from db
-        cursor = connection.execute(query)
-
-        # Obtaining records from table
-        rows = cursor.fetchall()
-
-        # Obtaining columns names from the cursor
-        column_names = [c[0] for c in cursor.description]
-
-        # For each row in the query result
-        for r in rows:
-            
-            # zipping column name with the corresponding value
-            r = list(zip(column_names, r))
-            
-            # For each zipped tuple (k, v), creating a dictionary with the association k:v
-            for t in r:
-                d[t[0]] = t[1]
-            
-            # Unpacking dictionary values            
-            revision: Revision = Revision(**d)
-
-            # Append the Revision to the list of Revisions
-            revisions.append(revision)
+    # If there is some data
+    if len(revisions_list) > 0:
+        return [Revision(**data) for data in revisions_list]
     
-        return revisions
+    return None
+   
+
+def u_get_revision_by_id(revision_id: int) -> Revision | None:
+    '''
+        Summary:
+            returns a Revision if the revision with "revision_id" is found, otherwise it returns None
+
+        Parameters:
+            revision_id (int): id of the revision to look for
+
+        Return Value:
+            Revision | None
+    '''
     
-
-def u_get_revision_by_id(user_id: int):
-
-    # Creating a dictionary to use it as a container for Revision data
-    d: dict = {}
-
+    # Defining the query to execute
     query: str = '''SELECT * 
                     FROM Revisions 
                     WHERE Revisions.deleted_at IS NULL AND 
@@ -61,29 +51,9 @@ def u_get_revision_by_id(user_id: int):
                     LIMIT 1'''
     
     # Defining and assigning query parameters
-    query_parameters = {'revision_id': user_id}
+    query_parameters = {'revision_id': revision_id}
 
-    # Inizialize SQLite db connection
-    with sqlite3.connect(DATABASE_DIR) as connection:
-        
-        # Obtaining cursor from db
-        cursor = connection.execute(query, query_parameters)
-
-        # Obtaining records from table
-        r = cursor.fetchone()
-
-        # Obtaining columns names from the cursor
-        column_names = [c[0] for c in cursor.description]
-
-        # zipping column name with the corresponding value
-        r = list(zip(column_names, r))
-            
-        # For each zipped tuple (k, v), creating a dictionary with the association k:v
-        for t in r:
-            d[t[0]] = t[1]
-        
-        # Unpacking dictionary values
-        revision: Revision = Revision(**d)
+    revision: dict = select_row_from_table(query=query, query_parameters=query_parameters)
     
-        return revision
+    return Revision(**revision) if len(revision.items()) > 0 else None
     
