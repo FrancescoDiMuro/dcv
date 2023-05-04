@@ -9,7 +9,7 @@ from typing import List
 
 from backend.schemas.dto import Customer, Job, Document, Revision, User
 
-from backend.utils.customers_utils import u_get_customers, u_get_customer_by_id
+from backend.utils.customers_utils import u_get_customers, u_get_customer_by_id, u_create_customer
 from backend.utils.jobs_utils import u_get_jobs, u_get_job_by_id
 from backend.utils.documents_utils import u_get_documents, u_get_document_by_id
 from backend.utils.revisions_utils import u_get_revisions, u_get_revision_by_id
@@ -58,18 +58,9 @@ async def get_customer_by_id(customer_id: int) -> Customer | object:
 
 # POST /customers
 @app.post('/customers', description='Creates a new Customer', response_model=Customer)
-async def post_customer(customer: Customer) -> Customer:
-    
-    # Inizialize SQLite db connection
-    with sqlite3.connect(DATABASE_DIR) as connection:
-    
-        sql_query = '''INSERT INTO Customers (name, created_at, updated_at)
-                       VALUES (:name, :created_at, :updated_at)'''
-        
-        # Execution of the INSERT query
-        connection.execute(sql_query, customer.dict())
-
-    return customer
+async def post_customer(customer: Customer) -> Customer | object:    
+    entity = u_create_customer(customer.dict())
+    return entity if isinstance(entity, Customer) else HTTPException(409)
 
 
 # PATCH /customers

@@ -5,46 +5,46 @@ from backend.utils.utils import ISO8601_now
 class Customer(BaseModel):
     id: int | None = None
     name: str
-    created_at: datetime = ISO8601_now
-    updated_at: datetime = ISO8601_now
+    created_at: datetime = ISO8601_now()
+    updated_at: datetime = ISO8601_now()
     deleted_at: datetime | None = None
 
 class Job(BaseModel):
-    id: int
+    id: int | None = None
     name: str
     description: str
-    created_at: datetime
-    updated_at: datetime
+    created_at: datetime = ISO8601_now()
+    updated_at: datetime = ISO8601_now()
     deleted_at: datetime | None = None
     customer_id: int
 
 class Document(BaseModel):
-    id: int
+    id: int | None = None
     name: str
     description: str
-    created_at: datetime
-    updated_at: datetime
+    created_at: datetime = ISO8601_now()
+    updated_at: datetime = ISO8601_now()
     deleted_at: datetime | None = None
     job_id: int
 
 class Revision(BaseModel):
-    id: int
+    id: int | None = None
     version: str
     description: str    
     file_path: str
-    created_at: datetime
-    updated_at: datetime
+    created_at: datetime = ISO8601_now()
+    updated_at: datetime = ISO8601_now()
     deleted_at: datetime | None = None
     user_id: int
     document_id: int    
 
 class User(BaseModel):
-    id: int
+    id: int | None = None
     name: str
     surname: str
     email: str
     password: str
-    created_at: datetime
-    updated_at: datetime
+    created_at: datetime = ISO8601_now()
+    updated_at: datetime = ISO8601_now()
     deleted_at: datetime | None = None
     access_level_id: int

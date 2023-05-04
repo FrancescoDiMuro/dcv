@@ -88,3 +88,19 @@ def select_row_from_table(query: str, query_parameters: dict = {}) -> dict:
         
         return d
         
+def insert_rows_into_table(query: str, dto_dict: dict) -> bool:
+    
+    ret_val: bool = False
+    
+    # Inizialize SQLite db connection
+    with sqlite3.connect(DATABASE_DIR) as connection:
+                  
+        # INSERT query execution
+        cursor = connection.execute(query, dto_dict)
+        ret_val = True if cursor.rowcount > 0 else False
+        connection.commit()
+        cursor.close()
+
+    return ret_val
+
+    
