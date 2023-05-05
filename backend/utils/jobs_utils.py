@@ -1,6 +1,8 @@
 from typing import List
 from backend.schemas.dto import Job
-from backend.utils.utils import select_rows_from_table, select_row_from_table
+from backend.utils.utils import (select_rows_from_table, 
+                                 select_row_from_table, 
+                                 insert_rows_into_table)
 
 
 def u_get_jobs() -> List[Job] | None:
@@ -57,3 +59,13 @@ def u_get_job_by_id(job_id: int) -> Job | None:
     
     return Job(**job_data) if len(job_data.items()) > 0 else None
     
+
+def u_create_job(dto_dict: dict) -> Job | None:
+
+    query = '''INSERT INTO Jobs (name, description, created_at, updated_at, customer_id)
+               VALUES (:name, :description, :created_at, :updated_at, :customer_id)'''
+    
+    if insert_rows_into_table(query=query, dto_dict=dto_dict):        
+        return Job(**dto_dict)
+    
+    return None

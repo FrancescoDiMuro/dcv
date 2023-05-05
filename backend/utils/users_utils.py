@@ -1,6 +1,8 @@
 from typing import List
 from backend.schemas.dto import User
-from backend.utils.utils import select_rows_from_table, select_row_from_table
+from backend.utils.utils import (select_rows_from_table, 
+                                 select_row_from_table, 
+                                 insert_rows_into_table)
 
 
 def u_get_users() -> List[User] | None:
@@ -56,4 +58,16 @@ def u_get_user_by_id(user_id: int) -> User | None:
     user_data: dict = select_row_from_table(query=query, query_parameters=query_parameters)
     
     return User(**user_data) if len(user_data.items()) > 0 else None
+
+
+def u_create_user(dto_dict: dict) -> User | None:
+
+    query = '''INSERT INTO Users (name, surname, email, password, created_at, updated_at, access_level_id)
+               VALUES (:name, :surname, :email, :password, :created_at, :updated_at, :access_level_id)'''
+    
+    if insert_rows_into_table(query=query, dto_dict=dto_dict):        
+        return User(**dto_dict)
+    
+    return None
+    
     

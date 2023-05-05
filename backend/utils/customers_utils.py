@@ -1,6 +1,8 @@
 from typing import List
 from backend.schemas.dto import Customer
-from backend.utils.utils import select_rows_from_table, select_row_from_table, insert_rows_into_table
+from backend.utils.utils import (select_rows_from_table, 
+                                 select_row_from_table, 
+                                 insert_rows_into_table)
 
 
 def u_get_customers() -> List[Customer] | None:
@@ -62,8 +64,8 @@ def u_create_customer(dto_dict: dict) -> Customer | None:
 
     query = '''INSERT INTO Customers (name, created_at, updated_at)
                VALUES (:name, :created_at, :updated_at)'''
-
-    if insert_rows_into_table(query=query, dto_dict=dto_dict):
+    
+    if insert_rows_into_table(query=query, dto_dict=dto_dict):        
         return Customer(**dto_dict)
     
     return None

@@ -1,6 +1,8 @@
 from typing import List
 from backend.schemas.dto import Revision
-from backend.utils.utils import select_rows_from_table, select_row_from_table
+from backend.utils.utils import (select_rows_from_table, 
+                                 select_row_from_table, 
+                                 insert_rows_into_table)
 
 
 def u_get_revisions() -> List[Revision] | None:
@@ -57,3 +59,13 @@ def u_get_revision_by_id(revision_id: int) -> Revision | None:
     
     return Revision(**revision) if len(revision.items()) > 0 else None
     
+
+def u_create_revision(dto_dict: dict) -> Revision | None:
+
+    query = '''INSERT INTO Revisions (version, description, file_path, created_at, updated_at, user_id, document_id)
+               VALUES (:version, :description, :file_path, :created_at, :updated_at, :user_id, :document_id)'''
+    
+    if insert_rows_into_table(query=query, dto_dict=dto_dict):        
+        return Revision(**dto_dict)
+    
+    return None

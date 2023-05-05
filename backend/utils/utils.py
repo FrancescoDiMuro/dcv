@@ -8,8 +8,8 @@ WORKING_DIR: str = getcwd()
 BACKEND_DIR = f'{WORKING_DIR}\\backend'
 DATABASE_DIR: str = f'{BACKEND_DIR}\\dcv.db'
 
-def ISO8601_now():
-    return datetime.strptime(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M%S.%f%z'), '%Y-%m-%dT%H:%M%S.%f%z')
+def ISO8601_now():    
+    return datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')
 
 
 def select_rows_from_table(query: str, query_parameters: dict = {}) -> List[dict]:
@@ -102,5 +102,4 @@ def insert_rows_into_table(query: str, dto_dict: dict) -> bool:
         cursor.close()
 
     return ret_val
-
-    
+ 

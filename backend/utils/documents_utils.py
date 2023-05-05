@@ -1,6 +1,8 @@
 from typing import List
 from backend.schemas.dto import Document
-from backend.utils.utils import select_rows_from_table, select_row_from_table
+from backend.utils.utils import (select_rows_from_table, 
+                                 select_row_from_table, 
+                                 insert_rows_into_table)
 
 
 def u_get_documents() -> List[Document] | None:
@@ -56,4 +58,15 @@ def u_get_document_by_id(document_id: int) -> Document | None:
     document_id: dict = select_row_from_table(query=query, query_parameters=query_parameters)
     
     return Document(**document_id) if len(document_id.items()) > 0 else None
+
+
+def u_create_document(dto_dict: dict) -> Document | None:
+
+    query = '''INSERT INTO Documents (name, description, created_at, updated_at, job_id)
+               VALUES (:name, :description, :created_at, :updated_at, :job_id)'''
+    
+    if insert_rows_into_table(query=query, dto_dict=dto_dict):        
+        return Document(**dto_dict)
+    
+    return None
     
