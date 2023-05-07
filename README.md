@@ -1,5 +1,14 @@
 # Project DCV
+
+## Introduction
 This is a personal project for building a DCV (Document Control Version) application.
+The main goal of the project is to develop a web application using REST APIs developed
+with FastAPI, and integrate some Front End in order to create a UI for the users.
+I'm developing this project to learn how to design, create, test and maintain a web application,
+since my actual goal is to become a back-end developer.
+I choose Python and FastAPI among all the other programming languages and web-app frameworks because I have
+some familiarity with Python, and thanks to its easy syntax, I thought it would be a good language
+to practice the concepts of back-end development.
 
 ## Database structure
 To make the project easier to build, I created a local SQLite3 db in which store data.
@@ -11,7 +20,6 @@ The entities in the db are:
 - User
 
 ## Installation
-
 The project has been entirely developed using Python 3.11.3.
 To install it, you can use git clone or you can manually download and move all the files and folders in this repository in the local project folder.
 The project uses a Virtual Environment in order to keep all packages and modules to avoid conflicts, so a "requirements.txt" file is provided in the root folder.
@@ -21,7 +29,6 @@ pip install -r requirements.txt
 ```
 
 ## Running the API server
-
 This project uses Uvicorn as a web server to manage the APIs.
 In order to test the application, you have to use the executable "uvicorn.exe" in the Virtual Environment, 
 running the server with the command:
@@ -37,7 +44,7 @@ uvicorn.exe backend.main:app --reload --port 8080
 ```
 
 <details>
-	<summary>Tables schemas</summary>
+	<summary style="font-size:30px">Tables schemas</summary>
 
 ### Customer Entity
 Each Client has the following attributes:
