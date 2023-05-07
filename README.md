@@ -10,6 +10,9 @@ The entities in the db are:
 - Revision
 - User
 
+<details>
+	<summary>Tables schemas</summary>
+
 ### Customer Entity
 Each Client has the following attributes:
 class Customer(BaseModel):
@@ -157,3 +160,5 @@ CREATE TABLE "Users" (
 	PRIMARY KEY("id" AUTOINCREMENT)
 )
 ```
+
+</details>
