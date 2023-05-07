@@ -3,9 +3,9 @@
 ## Introduction
 This is a personal project for building a DCV (Document Control Version) application.
 The main goal of the project is to develop a web application using REST APIs developed
-with FastAPI, and integrate some Front End in order to create a UI for the users.
+with FastAPI, and integrate some Front End programming language(s) in order to create a UI for the users.
 I'm developing this project to learn how to design, create, test and maintain a web application,
-since my actual goal is to become a back-end developer.
+since my current goal is to become a back-end developer.
 I choose Python and FastAPI among all the other programming languages and web-app frameworks because I have
 some familiarity with Python, and thanks to its easy syntax, I thought it would be a good language
 to practice the concepts of back-end development.
@@ -43,8 +43,11 @@ to change the port used by the web server, so:
 uvicorn.exe backend.main:app --reload --port 8080
 ```
 
+## Tables schemas
+In this section, you can find more details about tables schemas used in the database.
+
 <details>
-	<summary style="font-size:30px">Tables schemas</summary>
+	<summary>Tables schemas</summary>
 
 ### Customer Entity
 Each Client has the following attributes:
@@ -194,6 +197,9 @@ CREATE TABLE "Users" (
 )
 ```
 
+## Endpoints
+In this section, you can find more details about the available endpoints provided by the REST APIs server.
+
 </details>
 
 <details>
@@ -206,10 +212,28 @@ The available endpoints are:
 - /revisions
 - /users
 
-For each endpoint, there is a GET metod without any parameters (query all data), and a GET method with the id path parameter, like: 
+For each endpoint, there is a GET metod without any parameters (query all data), and a GET method with the id path parameter, like:
+```
 /customers/customer_id
+```
+where customer_id is a positive integer greater than 0.
 
-As well as the GET method, for each endpoint there is a POST parameter to create a resource
-in the database.
+As well as the GET method, for each endpoint there is a POST method to create a resource in the database.
 
 </details>
+
+## Test data
+The project provides a file named "test_data.py" in the folder "backend\utils\" which is responsible to fill the database with some test data.
+
+## Application features
+After creating the functions to fullfill the basic GET and POST methods in order to get and create some resources,  
+the web application should be able to:
+1. present a list of customers with a summary of how many jobs and documents are associated to it
+   - once clicking on a customer, the user should access a web page with the info of the customer and the jobs associated to it;
+   - in this page, the user should be able to edit the customer's info, as well as delete it;
+2. clicking on a job, the user should access to a web page with the info of the job, and the documents associated to it;
+   - in this page, the user should be able to edit the job's info, as well as delete it;
+3. clicking on a document, the user should access to a web page with the info of the document, and the revisions associated to it;
+   - in this page, the user should be able to edit the document's info, as well as delete it;
+4. clicking on a revision, the user should access to a web page with the info of the revision;
+   - in this page, the user should be able to edit the revision's info, as well as delete it.
