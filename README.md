@@ -10,6 +10,32 @@ The entities in the db are:
 - Revision
 - User
 
+## Installation
+
+The project has been entirely developed using Python 3.11.3.
+To install it, you can use git clone or you can manually download and move all the files and folders in this repository in the local project folder.
+The project uses a Virtual Environment in order to keep all packages and modules to avoid conflicts, so a "requirements.txt" file is provided in the root folder.
+To install the "requirements.txt" file, navigate to the "Scripts" folder (env) and use:
+```
+pip install -r requirements.txt
+```
+
+## Running the API server
+
+This project uses Uvicorn as a web server to manage the APIs.
+In order to test the application, you have to use the executable "uvicorn.exe" in the Virtual Environment, 
+running the server with the command:
+```
+uvicorn.exe backend.main:app --reload
+```
+
+The parameter "--reload" is used to reload the server everytime some changes are detected in the project files.
+On Windows, it may be that the default port used by uvicorn is already in use, so if this is the case, you can use the parameter "--port" in order
+to change the port used by the web server, so:
+```
+uvicorn.exe backend.main:app --reload --port 8080
+```
+
 <details>
 	<summary>Tables schemas</summary>
 
@@ -179,4 +205,4 @@ For each endpoint, there is a GET metod without any parameters (query all data),
 As well as the GET method, for each endpoint there is a POST parameter to create a resource
 in the database.
 
-<details>
+</details>
