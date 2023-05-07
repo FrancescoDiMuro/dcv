@@ -298,3 +298,6 @@ ON Revisions.user_id = Users.id
 WHERE Documents.id = 10
 ORDER BY Revisions.version
 ```
+
+For any suggestion or improvement I can implement in the project, please reach me here on GitHub.
+Thanks 😊
