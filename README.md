@@ -131,7 +131,7 @@ CREATE TABLE "Documents" (
 	"deleted_at"	TEXT,
 	"job_id"	INTEGER NOT NULL,
 	PRIMARY KEY("id" AUTOINCREMENT),
-	FOREIGN KEY("job_id") REFERENCES "Jobs"("id") ON DELETE CASCADE
+	FOREIGN KEY("job_id") REFERENCES "Jobs"("id")
 )
 ```
 
@@ -197,10 +197,10 @@ CREATE TABLE "Users" (
 )
 ```
 
+</details>
+
 ## Endpoints
 In this section, you can find more details about the available endpoints provided by the REST APIs server.
-
-</details>
 
 <details>
 	<summary>Endpoints</summary>
@@ -228,12 +228,74 @@ The project provides a file named "test_data.py" in the folder "backend\utils\" 
 ## Application features
 After creating the functions to fullfill the basic GET and POST methods in order to get and create some resources,  
 the web application should be able to:
-1. present a list of customers with a summary of how many jobs and documents are associated to it
-   - once clicking on a customer, the user should access a web page with the info of the customer and the jobs associated to it;
-   - in this page, the user should be able to edit the customer's info, as well as delete it;
-2. clicking on a job, the user should access to a web page with the info of the job, and the documents associated to it;
-   - in this page, the user should be able to edit the job's info, as well as delete it;
+1. show a list of customers with a summary of how many jobs are associated to it
+- once clicking on a customer, the user should access a web page with the info of the customer and the jobs associated to it, with the total number of documents for each job;
+- in this page, the user should be able to edit the customer's info, as well as delete it;
+2. clicking on a job, the user should access to a web page with the info of the job, the documents associated to it, with the total number of revisions, the last version, the last update timestamp and the last actor for each document;
+- in this page, the user should be able to edit the job's info, as well as delete it;
 3. clicking on a document, the user should access to a web page with the info of the document, and the revisions associated to it;
-   - in this page, the user should be able to edit the document's info, as well as delete it;
-4. clicking on a revision, the user should access to a web page with the info of the revision;
-   - in this page, the user should be able to edit the revision's info, as well as delete it.
+- in this page, the user should be able to edit the document's info, as well as delete it.
+
+# SQL queries to fullfill application features
+1. Show a list of customers with a summary of how many jobs are associated to it:
+```sql
+SELECT Customers.name AS 'customer_name',
+	   COUNT(Jobs.id) AS 'total_jobs'
+FROM Customers
+LEFT JOIN Jobs
+ON Jobs.customer_id = Customers.id
+WHERE Customers.deleted_at IS NULL
+GROUP BY Customers.id
+ORDER BY Customers.name
+```
+- once clicking on a customer, the user should access a web page with the info of the customer and the jobs associated to it, with the total number of documents for each job;
+```sql
+SELECT Jobs.name AS 'job_name',
+Jobs.description AS 'job_description',
+COUNT(Documents.id) AS 'total_documents'
+FROM Customers
+LEFT JOIN Jobs
+ON Jobs.customer_id = Customers.id
+LEFT JOIN Documents
+ON Documents.job_id = Jobs.id
+WHERE Customers.id = 1 AND
+Jobs.deleted_at IS NULL 
+GROUP BY Jobs.id
+ORDER BY Jobs.name
+```
+
+2. clicking on a job, the user should access to a web page with the info of the job, the documents associated to it, with the total number of revisions, the last version, the last update timestamp and the last actor for each document:
+```sql
+SELECT Documents.name AS 'document_name',
+	   Documents.description AS 'document_description',
+	   COUNT(Revisions.id) AS 'total_revisions',
+	   MAX(Revisions.version) AS 'last_revision',
+	   Revisions.updated_at AS 'last_update',
+	   Users.name || ' ' || Users.surname AS 'actor'
+FROM Jobs
+LEFT JOIN Documents
+ON Documents.job_id = Jobs.id
+LEFT JOIN Revisions
+ON Revisions.document_id = Documents.id
+LEFT JOIN Users
+ON Revisions.user_id = Users.id
+WHERE Jobs.id = 3 AND
+Documents.deleted_at IS NULL 
+GROUP BY Documents.id
+ORDER BY Documents.id
+```
+
+3. clicking on a document, the user should access to a web page with the info of the document, and the revisions associated to it;
+- in this page, the user should be able to edit the document's info, as well as delete it;
+```sql
+SELECT Revisions.version AS 'document_version',
+	   Revisions.updated_at 'document_last_update',
+	   Users.name || ' ' || Users.surname AS 'revision_actor'
+FROM Documents
+LEFT JOIN Revisions
+ON Revisions.document_id = Documents.id
+LEFT JOIN Users
+ON Revisions.user_id = Users.id
+WHERE Documents.id = 10
+ORDER BY Revisions.version
+```
