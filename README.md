@@ -1,5 +1,5 @@
 # Project DCV
-This is a personal project for building a DCV (Document Control Version).
+This is a personal project for building a DCV (Document Control Version) application.
 
 ## Database structure
 To make the project easier to build, I created a local SQLite3 db in which store data.
