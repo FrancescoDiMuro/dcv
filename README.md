@@ -173,8 +173,7 @@ The available endpoints are:
 - /revisions
 - /users
 
-For each endpoint, there is a GET metod without any parameters (query all data), 
-and a GET method with the id path parameter, like:
+For each endpoint, there is a GET metod without any parameters (query all data), and a GET method with the id path parameter, like: 
 /customers/customer_id
 
 As well as the GET method, for each endpoint there is a POST parameter to create a resource
