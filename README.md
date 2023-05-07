@@ -223,7 +223,7 @@ As well as the GET method, for each endpoint there is a POST method to create a 
 </details>
 
 ## Test data
-The project provides a file named "test_data.py" in the folder "backend\utils\" which is responsible to fill the database with some test data.
+The project provides a file named "test_data.py" in the folder "backend\utils\" which is responsible to create the db and fill it with some test data.
 
 ## Application features
 After creating the functions to fullfill the basic GET and POST methods in order to get and create some resources,  
@@ -236,7 +236,7 @@ the web application should be able to:
 3. clicking on a document, the user should access to a web page with the info of the document, and the revisions associated to it;
 - in this page, the user should be able to edit the document's info, as well as delete it.
 
-# SQL queries to fullfill application features
+## SQL queries to fullfill application features
 1. Show a list of customers with a summary of how many jobs are associated to it:
 ```sql
 SELECT Customers.name AS 'customer_name',
@@ -285,8 +285,7 @@ GROUP BY Documents.id
 ORDER BY Documents.id
 ```
 
-3. clicking on a document, the user should access to a web page with the info of the document, and the revisions associated to it;
-- in this page, the user should be able to edit the document's info, as well as delete it;
+3. clicking on a document, the user should access to a web page with the info of the document, and the revisions associated to it:
 ```sql
 SELECT Revisions.version AS 'document_version',
 	   Revisions.updated_at 'document_last_update',

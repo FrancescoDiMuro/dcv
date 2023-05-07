@@ -3,3 +3,4 @@ images/
 sqlite_project/
 videos/
 backend/__pycache__
+backend/dcv.db
