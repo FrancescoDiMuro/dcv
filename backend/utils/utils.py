@@ -1,4 +1,5 @@
 import sqlite3
+import sqlalchemy
 from typing import List
 from datetime import datetime, timezone
 from os import getcwd
@@ -102,4 +103,3 @@ def insert_rows_into_table(query: str, dto_dict: dict) -> bool:
         cursor.close()
 
     return ret_val
- 
