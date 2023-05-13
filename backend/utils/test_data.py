@@ -352,42 +352,42 @@ test_revisions: List[dict[str, int]] = \
     }
 ]
 
-# Create the db
-if exists(DATABASE_FILE_NAME):
-    remove(DATABASE_FILE_NAME)
+# # Create the db
+# if exists(DATABASE_FILE_NAME):
+#     remove(DATABASE_FILE_NAME)
 
-with sqlite3.connect(DATABASE_FILE_NAME) as connection:
-    for query in TABLES_CREATE_STATEMENTS:
-        connection.execute(query)
-        connection.commit()        
+# with sqlite3.connect(DATABASE_FILE_NAME) as connection:
+#     for query in TABLES_CREATE_STATEMENTS:
+#         connection.execute(query)
+#         connection.commit()        
 
-# Populating Users
-print(f'{"-" * 10} USERS {"-" * 10}')
-for user in test_users:
-    if requests.post(USERS_ENDPOINT, json=user).status_code == 200:
-        print(f'The user "{user["name"]}" has been inserted in the table')
+# # Populating Users
+# print(f'{"-" * 10} USERS {"-" * 10}')
+# for user in test_users:
+#     if requests.post(USERS_ENDPOINT, json=user).status_code == 200:
+#         print(f'The user "{user["name"]}" has been inserted in the table')
 
-# Populating Customers
-print(f'{"-" * 10} CUSTOMERS {"-" * 10}')
-for customer in test_customers:
-    if requests.post(CUSTOMERS_ENDPOINT, json=customer).status_code == 200:
-        print(f'The customer "{customer["name"]}" has been inserted in the table')
+# # Populating Customers
+# print(f'{"-" * 10} CUSTOMERS {"-" * 10}')
+# for customer in test_customers:
+#     if requests.post(CUSTOMERS_ENDPOINT, json=customer).status_code == 200:
+#         print(f'The customer "{customer["name"]}" has been inserted in the table')
 
-# Populating Jobs
-print(f'{"-" * 10} JOBS {"-" * 10}')
-for job in test_jobs:
-    if requests.post(JOBS_ENDPOINT, json=job).status_code == 200:
-        print(f'The job "{job["name"]}" has been inserted in the table')
+# # Populating Jobs
+# print(f'{"-" * 10} JOBS {"-" * 10}')
+# for job in test_jobs:
+#     if requests.post(JOBS_ENDPOINT, json=job).status_code == 200:
+#         print(f'The job "{job["name"]}" has been inserted in the table')
 
-# Populating Documents
-print(f'{"-" * 10} DOCUMENTS {"-" * 10}')
-for document in test_documents:
-    if requests.post(DOCUMENTS_ENDPOINT, json=document).status_code == 200:
-        print(f'The document "{document["name"]}" has been inserted in the table')
+# # Populating Documents
+# print(f'{"-" * 10} DOCUMENTS {"-" * 10}')
+# for document in test_documents:
+#     if requests.post(DOCUMENTS_ENDPOINT, json=document).status_code == 200:
+#         print(f'The document "{document["name"]}" has been inserted in the table')
 
-# Populating Revisions
-print(f'{"-" * 10} REVISIONS {"-" * 10}')
-for revision in test_revisions:
-    if requests.post(REVISIONS_ENDPOINT, json=revision).status_code == 200:
-        print(f'The revision "{revision["version"]}" of document_id {revision["document_id"]} has been inserted in the table')
+# # Populating Revisions
+# print(f'{"-" * 10} REVISIONS {"-" * 10}')
+# for revision in test_revisions:
+#     if requests.post(REVISIONS_ENDPOINT, json=revision).status_code == 200:
+#         print(f'The revision "{revision["version"]}" of document_id {revision["document_id"]} has been inserted in the table')
     

@@ -1,5 +1,5 @@
 from sqlalchemy.orm import declarative_base
-from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy import Column, String, Integer, Identity, ForeignKey
 
 
 # Creation of the declarative base, use to declare all other models
@@ -9,17 +9,17 @@ class User(Base):
 
     __tablename__ = 'Users'
 
-    id = Column('id', Integer, primary_key=True, nullable=False)
+    id = Column('id', Integer, Identity(), primary_key=True, nullable=False)
     name = Column('name', String, nullable=False)
     surname = Column('surname', String, nullable=False)
     email = Column('email', String, nullable=False)
     password = Column('password', String, nullable=False)
     created_at = Column('created_at', String, nullable=False)
     updated_at = Column('updated_at', String, nullable=False)
-    deleted_at = Column('deleted_at', String, nullable=False)
+    deleted_at = Column('deleted_at', String, nullable=True, default=None)
     access_level_id = Column('access_level_id', String, nullable=False)
 
-    def __init__(self, id: int, name: str, surname: str, email: str, password: str, 
+    def __init__(self, name: str, surname: str, email: str, password: str, id: int | None = None, 
                  created_at: str | None = None, updated_at: str | None = None, 
                  deleted_at: str | None = None, access_level_id: int | None = None):
         
@@ -65,7 +65,7 @@ class Job(Base):
 
     id = Column('id', Integer, primary_key=True, nullable=False)
     name = Column('name', String, nullable=False)
-    description = Column('name', String, nullable=False)
+    description = Column('description', String, nullable=False)
     created_at = Column('created_at', String, nullable=False)
     updated_at = Column('updated_at', String, nullable=False)
     deleted_at = Column('deleted_at', String, nullable=False)
@@ -93,7 +93,7 @@ class Document(Base):
 
     id = Column('id', Integer, primary_key=True, nullable=False)
     name = Column('name', String, nullable=False)
-    description = Column('name', String, nullable=False)
+    description = Column('description', String, nullable=False)
     created_at = Column('created_at', String, nullable=False)
     updated_at = Column('updated_at', String, nullable=False)
     deleted_at = Column('deleted_at', String, nullable=False)
@@ -121,7 +121,7 @@ class Revision(Base):
 
     id = Column('id', Integer, primary_key=True, nullable=False)
     version = Column('version', String, nullable=False)
-    description = Column('name', String, nullable=False)
+    description = Column('description', String, nullable=False)
     file_path = Column('file_path', String, nullable=False)
     created_at = Column('created_at', String, nullable=False)
     updated_at = Column('updated_at', String, nullable=False)

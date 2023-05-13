@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
-from backend.schemas.models import Base, User
+from backend.schemas.models import User, Base
 from backend.utils.test_data import test_users
+from backend.utils.utils import ISO8601_now
 
 
 DATABASE_TYPE: str = 'sqlite'
@@ -20,11 +21,16 @@ DATABASE_NAME: str = 'testdb.db'
 
 engine = create_engine(f'{DATABASE_TYPE}+{DBAPI}:///{DATABASE_NAME}', echo=True)
 
-Base.metadata.create_all()
+Base.metadata.create_all(bind=engine)
 
 Session = sessionmaker(bind=engine)
 
 with Session.begin() as session:
     
-    for test_user in test_users:
-        session.add(User(**test_user))
+    # for test_user in test_users:
+    #     test_user['created_at'] = ISO8601_now()
+    #     test_user['updated_at'] = ISO8601_now()
+    #     session.add(User(**test_user))
+
+    result = session.query(User).all()
+    print(result)
