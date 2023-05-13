@@ -1,5 +1,5 @@
 from typing import List
-from backend.schemas.dto import Document
+from backend.db.dto import Document
 from backend.utils.utils import (select_rows_from_table, 
                                  select_row_from_table, 
                                  insert_rows_into_table)

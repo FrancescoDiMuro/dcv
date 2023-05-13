@@ -1,17 +1,10 @@
 import sqlite3
 
 from fastapi import FastAPI, HTTPException
-# from fastapi.responses import HTMLResponse
-# from fastapi.staticfiles import StaticFiles
-# from fastapi.templating import Jinja2Templates
 from os import getcwd
 from typing import List
 
-from backend.schemas.dto import Customer, Job, Document, Revision, User
-
-from backend.utils.customers_utils import (u_get_customers, 
-                                           u_get_customer_by_id, 
-                                           u_create_customer)
+from backend.db.dto import Customer, Job, Document, Revision, User
 
 from backend.utils.jobs_utils import (u_get_jobs, 
                                       u_get_job_by_id, 
@@ -31,23 +24,31 @@ from backend.utils.users_utils import (u_get_users,
 
 from backend.utils.utils import ISO8601_now
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
+
+from backend.db.models import Base
+from backend.endpoints.customers.utils import read_customers, read_customer_by_id, create_customer
+
 # Constants declaration and initialization
 WORKING_DIR: str = getcwd()
 BACKEND_DIR = f'{WORKING_DIR}\\backend'
-DATABASE_DIR: str = f'{BACKEND_DIR}\\dcv.db'
-TEMPLATES_DIR = f'{WORKING_DIR}\\frontend\\static\\templates'
+DATABASE_DIR: str = f'{BACKEND_DIR}\\db\\dcv.db'
+DATABASE_TYPE: str = 'sqlite'
+DBAPI: str = 'pysqlite'
 
+engine = create_engine(f'{DATABASE_TYPE}+{DBAPI}:///{DATABASE_DIR}', echo=True)
 
-# Templates object to use templates in the app
-# templates = Jinja2Templates(directory=TEMPLATES_DIR)
+Base.metadata.create_all(bind=engine)
 
-# ----- FastAPI App -----
+Session = sessionmaker(bind=engine)
 
-# App creation
-app = FastAPI()
+with Session.begin() as session:
 
-# Mounting static files directory in order to link web pages to each other
-# app.mount("/static", StaticFiles(directory="frontend/static/templates"), name="static")
+    # ----- FastAPI App -----
+
+    # App creation
+    app = FastAPI()
 
 # ----- Endpoints configuration -----
 # Root
@@ -59,14 +60,13 @@ async def root() -> dict:
 # GET /customers
 @app.get('/customers', description='Get list of configured Customers')
 async def get_customers() -> List[Customer] | object:
-    customers = u_get_customers()
+    customers = [Customer(**d) for d in read_customers(session=session)]
     return customers if customers is not None else HTTPException(204)
 
 
-# GET /customers/{customer_id}
 @app.get('/customers/{customer_id}', description='Get a Customer by its id')
 async def get_customer_by_id(customer_id: int) -> Customer | object:
-    customer = u_get_customer_by_id(customer_id=customer_id)    
+    customer = read_customer_by_id(session=session, customer_id=customer_id)    
     return customer if customer is not None else HTTPException(204)
 
 
@@ -75,21 +75,22 @@ async def get_customer_by_id(customer_id: int) -> Customer | object:
 async def post_customer(customer: Customer) -> Customer | object:    
     customer.created_at = ISO8601_now()
     customer.updated_at = ISO8601_now()
-    customer_dict = customer.dict()
-    entity = u_create_customer(customer_dict)
+    customer_dto = customer.dict()
+    customer_dto.pop('id')
+    entity = create_customer(session=session, customer_dto=customer_dto)
     return entity if isinstance(entity, Customer) else HTTPException(409)
 
 
-# PATCH /customers
-@app.patch('/customers/{customer_id}')
-async def delete_customer(customer_id: int):
-    with sqlite3.connect(DATABASE_DIR) as connection:
+# # PATCH /customers
+# @app.patch('/customers/{customer_id}')
+# async def delete_customer(customer_id: int):
+#     with sqlite3.connect(DATABASE_DIR) as connection:
     
-        customer: dict = u_get_customer_by_id(customer_id).dict(exclude_unset=True)
+#         customer: dict = u_get_customer_by_id(customer_id).dict(exclude_unset=True)
 
-        customer['deleted_at'] = ISO8601_now()
+#         customer['deleted_at'] = ISO8601_now()
 
-        return customer
+#         return customer
 
         
 # GET /jobs
