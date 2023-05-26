@@ -163,6 +163,6 @@ async def post_user(user: User) -> User | object:
     user.updated_at = ISO8601_now()
     user_dto = user.dict()
     user_dto.pop('id')
-    entity = User(**create_document(session=session, user_dto=user_dto))
+    entity = User(**create_user(session=session, user_dto=user_dto))
     return entity if isinstance(entity, User) else HTTPException(409)
     
