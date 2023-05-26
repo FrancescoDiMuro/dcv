@@ -15,11 +15,10 @@ def read_customer_by_id(session: Session, customer_id: int) -> dict | None:
         return None
     
 def create_customer(session: Session, customer_dto: dict) -> dict | None:
+    
     customer = Customer(**customer_dto)
+    session.add(customer)
     session.commit()
-    print(customer.__dict__)
-    return customer
-
+    response_body: dict = {'id': customer.id, **customer_dto}
     
-    
-        
+    return response_body

@@ -47,6 +47,7 @@ class Customer(Base):
 
     def __init__(self, name: str, created_at: str | None = None, updated_at: str | None = None, deleted_at: str | None = None):
         
+        self.id = None
         self.name = name
         self.created_at = created_at
         self.updated_at = updated_at
@@ -66,7 +67,7 @@ class Job(Base):
     created_at = Column('created_at', String, nullable=False)
     updated_at = Column('updated_at', String, nullable=False)
     deleted_at = Column('deleted_at', String)
-    customer_id = Column(Integer, ForeignKey('Customers.id'), nullable=False) 
+    customer_id = Column(Integer, ForeignKey('Customers.id'), nullable=False)
 
     def __init__(self, name: str, description: str, 
                  created_at: str | None = None, updated_at: str | None = None,
