@@ -16,6 +16,8 @@ def read_user_by_id(session: Session, user_id: int) -> dict | None:
     
 def create_user(session: Session, user_dto: dict) -> dict | None:
     
+    print(user_dto['username'])
+
     user = User(**user_dto)
     session.add(user)
     session.commit()

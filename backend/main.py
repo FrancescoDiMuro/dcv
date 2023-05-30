@@ -23,34 +23,35 @@ DATABASE_DIR: str = f'{BACKEND_DIR}\\db\\dcv.db'
 DATABASE_TYPE: str = 'sqlite'
 DBAPI: str = 'pysqlite'
 
+# Create the SQLAlchemy engine
 engine = create_engine(f'{DATABASE_TYPE}+{DBAPI}:///{DATABASE_DIR}', echo=True)
 
+# Create all the metadata (tables, objects) specified in the Base class
 Base.metadata.create_all(bind=engine)
 
+# Create a class of sessionmaker and assigning to the class Session
 Session = sessionmaker(bind=engine)
 
 with Session.begin() as session:
 
-    # ----- FastAPI App -----
-
-    # App creation
+    # Creates FastAPI app
     app = FastAPI()
 
 # ----- Endpoints configuration -----
 # Root
 @app.get('/')
 async def root() -> dict:
-    return {'message': 'Root'}
+    return {'message': 'Welcome to DCV APIs!'}
    
 
 # GET /customers
-@app.get('/customers', description='Get list of configured Customers')
+@app.get('/customers', description='Get a list of configured Customers')
 async def get_customers() -> List[Customer] | object:
     customers = [Customer(**d) for d in read_customers(session=session)]
     return customers if customers is not None else HTTPException(204)
 
 # GET /customers/{customer_id}
-@app.get('/customers/{customer_id}', description='Get a Customer by its id')
+@app.get('/customers/{customer_id}', description='Get a Customer by its id', response_model=Customer)
 async def get_customer_by_id(customer_id: int) -> Customer | object:
     customer = read_customer_by_id(session=session, customer_id=customer_id)    
     return customer if customer is not None else HTTPException(204)
@@ -68,14 +69,14 @@ async def post_customer(customer: Customer) -> Customer | object:
 
        
 # GET /jobs
-@app.get('/jobs', description='Get list of configured Jobs')
+@app.get('/jobs', description='Get a list of configured Jobs', response_model=List[Job])
 async def get_jobs() -> List[Job] | object:
     jobs = [Job(**d) for d in read_jobs(session=session)]
     return jobs if jobs is not None else HTTPException(204)
 
 
 # GET /jobs/{job_id}
-@app.get('/jobs/{job_id}', description='Get a Job by its id')
+@app.get('/jobs/{job_id}', description='Get a Job by its id', response_model=Job)
 async def get_job_by_id(job_id: int) -> Job | object:
     job = read_job_by_id(session=session, job_id=job_id)    
     return job if job is not None else HTTPException(204)
@@ -93,14 +94,14 @@ async def post_job(job: Job) -> Job | object:
     
 
 # GET /documents
-@app.get('/documents', description='Get list of configured Documents')
+@app.get('/documents', description='Get a list of configured Documents', response_model=List[Document])
 async def get_documents() -> List[Document] | object:
     documents = [Document(**d) for d in read_documents(session=session)]
     return documents if documents is not None else HTTPException(204)
 
 
 # GET /documents/{document_id}
-@app.get('/documents/{document_id}', description='Get a Document by its id')
+@app.get('/documents/{document_id}', description='Get a Document by its id', response_model=Document)
 async def get_document_by_id(document_id: int) -> Document | object:
     document = read_document_by_id(session=session, document_id=document_id)    
     return document if document is not None else HTTPException(204)
@@ -118,14 +119,14 @@ async def post_document(document: Document) -> Document | object:
 
 
 # GET /revisions
-@app.get('/revisions', description='Get list of configured Revisions')
+@app.get('/revisions', description='Get a list of configured Revisions', response_model=List[Revision])
 async def get_revisions() -> List[Revision] | object:
     revisions = [Revision(**d) for d in read_revisions(session=session)]
     return revisions if revisions is not None else HTTPException(204)
 
 
 # GET /revisions/{revision_id}
-@app.get('/revisions/{revision_id}', description='Get a Revision by its id')
+@app.get('/revisions/{revision_id}', description='Get a Revision by its id', response_model=Revision)
 async def get_revision_by_id(revision_id: int) -> Revision | object:
     revision = read_revision_by_id(session=session, revision_id=revision_id)    
     return revision if revision is not None else HTTPException(204)
@@ -143,14 +144,14 @@ async def post_revision(revision: Revision) -> Revision | object:
     
 
 # GET /users
-@app.get('/users', description='Get list of configured Users')
+@app.get('/users', description='Get a list of configured Users', response_model=List[User])
 async def get_users() -> List[User] | object:
     users = [User(**d) for d in read_users(session=session)]
     return users if users is not None else HTTPException(204)
 
 
 # GET /users/{user_id}
-@app.get('/users/{user_id}', description='Get a User by its id')
+@app.get('/users/{user_id}', description='Get a User by its id', response_model=User)
 async def get_user_by_id(user_id: int) -> User | object:
     user = read_user_by_id(session=session, user_id=user_id)    
     return user if user is not None else HTTPException(204)

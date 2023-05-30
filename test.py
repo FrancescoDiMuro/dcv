@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from backend.db.models import User, Customer, Job, Document, Revision, Base
-from backend.utils.test_data import test_users, test_customers, test_jobs, test_documents, test_revisions
+from backend.utils.utils import test_users, test_customers, test_jobs, test_documents, test_revisions
 from backend.utils.utils import ISO8601_now
 from os import getcwd
 

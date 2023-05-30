@@ -10,29 +10,28 @@ class User(Base):
     __tablename__ = 'Users'
 
     id = Column('id', Integer, Identity(), primary_key=True, nullable=False)
+    username = Column('username', String, nullable=False)
     name = Column('name', String, nullable=False)
     surname = Column('surname', String, nullable=False)
     email = Column('email', String, nullable=False)
     password = Column('password', String, nullable=False)
     created_at = Column('created_at', String, nullable=False)
     updated_at = Column('updated_at', String, nullable=False)
-    deleted_at = Column('deleted_at', String, nullable=True, default=None)
-    access_level_id = Column('access_level_id', String, nullable=False)
+    deleted_at = Column('deleted_at', String, nullable=True)
 
-    def __init__(self, name: str, surname: str, email: str, password: str, 
-                 created_at: str | None = None, updated_at: str | None = None, 
-                 access_level_id: int | None = None):
+    def __init__(self, username: str, name: str, surname: str, email: str, password: str, 
+                 created_at: str | None = None, updated_at: str | None = None):
         
+        self.username = username
         self.name = name
         self.surname = surname
         self.email = email
         self.password = password
         self.created_at = created_at
-        self.updated_at = updated_at
-        self.access_level_id = access_level_id
+        self.updated_at = updated_at        
 
     def __repr__(self):
-        return f'User (id = {self.id}, name = {self.name}, surname = {self.surname})'
+        return f'User (id = {self.id}, username = {self.username})'
 
 
 class Customer(Base):
